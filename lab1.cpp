@@ -1,7 +1,7 @@
 //============================================================================
 // Name        : 22B_Lab1.cpp
 // Author      : Nancy Zhou
-// Version     : 01
+// Version     : 05
 // Copyright   : Your copyright notice
 // Description : a program that reads a text file that is entered by the user containing a set of test scores, calculates the average, median and mode.
 //============================================================================
