@@ -1,8 +1,8 @@
 //============================================================================
 // Name        : 22B_Lab1.cpp
 // Author      : Nancy Zhou
-// Version     : 05
-// Copyright   : Your copyright notice
+// Version     : 2.5
+// Copyright   : 4/25/17
 // Description : a program that reads a text file that is entered by the user containing a set of test scores, calculates the average, median and mode.
 //============================================================================
 
@@ -19,41 +19,57 @@ int getScores(vector<int>&testScores);//reference b/c the vector is being initia
 int sortScores(vector<int>&testScores);//reference b/c the sorted vector needs to return to main
 int calcAverage(vector<int>testScores, int);
 int calcMedian(vector<int>testScores,int);
-int calcMode(vector<int>testScores,vector<int> mod);
+int calcMode(vector<int>testScores,vector<int> &mod);//reference b/c a vector is created and needed in the print function
 void print(vector<int>testScores, int avg, int med, vector<int> mod);
 
+/**==============================================================
+                    Main
+==============================================================**/
 int main()
 {
-
+    char runagain;
     vector<int> testScores;
     vector<int> mod;
     int avg, med;
     //cout << "hello" << endl;
+    do
+    {
 
-    if (getScores(testScores))
-    {
-        sortScores(testScores); //Call sorting function here
-        avg = calcAverage(testScores, avg);
-        //cout<<"This is the average:"<<endl<< avg<<endl;
-        med = calcMedian(testScores, med);
-        //cout<<"This is the median:"<<endl<< med<<endl;
-        calcMode(testScores, mod);
-        print(testScores, avg, med, mod);
-    }
-    else
-    {
-        cout << "Error getting test scores" << endl;
-    }
+//cout << "hello" << endl;
+        if (getScores(testScores))
+        {
+            sortScores(testScores); //Call sorting function here
+            avg = calcAverage(testScores, avg);
+            //cout<<"This is the average:"<<endl<< avg<<endl;
+            med = calcMedian(testScores, med);
+            //cout<<"This is the median:"<<endl<< med<<endl;
+            calcMode(testScores, mod);
+            print(testScores, avg, med, mod);
+        }//info of scores is calculated and printed
+        else
+        {
+            cout << "Error getting test scores" << endl;
+        }//getscores failed
+        cout << "Press any key to input another file or # to exit. " << endl;
+        cin >> runagain;
+    }//the program is replayed if the user wants to calculate another vector.
+    while (runagain!= '#');
+
+    cout << "Thank you for using this program." << endl;
 
     return 0;
 }
+/**=============================================================
+Gets the file name from the user and adds the elements of the
+file to a vector.
+ ==============================================================*/
 int getScores(vector <int> &testScores )
 {
     ifstream finput;
     int score;
-    string input="lab1.txt";//use this until test the cin
-    //cout << "Please input file name:" << endl;
-    //cin>>input;
+    string input;//="lab1.txt";//use this until test the cin
+    cout << "Please input file name:" << endl;
+    cin>>input;
     finput.open(input.c_str());//open file, ifstream reads as char*, so I needed to use .c_str
     if (finput.fail())
     {
@@ -75,20 +91,26 @@ int getScores(vector <int> &testScores )
     finput.close();
     return 1;
 }
+/**=============================================================
+Sorts the elements of the vector.
+ ==============================================================*/
 
-int sortScores(vector<int>&testScores)//sorts the vector
+int sortScores(vector<int>&testScores)//sorts the vector with sort function
 {
     sort (testScores.begin(), testScores.end());
-    cout<< "This is the sorted vector:"<<endl;
+    /* cout<< "This is the sorted vector:"<<endl;
     for (int val:testScores)
-        // {
-        //for (int r=0; r <5&&testScores.size; r++ )
-    {
-        cout << val << " ";
-    }
-    cout<< endl;
+         // {
+         //for (int r=0; r <5&&testScores.size; r++ )
+     {
+         cout << val << " ";
+     }
+     cout<< endl;*/
     //}
 }
+/**=============================================================
+Calculates the average.
+ ==============================================================*/
 int calcAverage(vector <int>scores, int avg)// sums the elements in the vector then divides it by the amount of elements
 {
     int size;
@@ -105,7 +127,9 @@ int calcAverage(vector <int>scores, int avg)// sums the elements in the vector t
 
     return avg;
 }
-
+/**=============================================================
+Calculates the middle element.
+ ==============================================================*/
 
 int calcMedian(vector<int>testScores, int med)// uses the amount of elements and counts to the half of that number, if even it averages that number and the next, if odd takes the number
 {
@@ -115,8 +139,11 @@ int calcMedian(vector<int>testScores, int med)// uses the amount of elements and
     return med;
 
 }
-
-int calcMode(vector<int> scores,vector<int> mod)//reads the vector and stores the most occurring element
+/**=============================================================
+Creates a vector that finds and stores the most occurring
+elements.
+ ==============================================================*/
+int calcMode(vector<int> scores,vector<int> &mod)//reads the vector and stores the most occurring element
 //count and compare
 {
     int occurs=1;
@@ -124,7 +151,6 @@ int calcMode(vector<int> scores,vector<int> mod)//reads the vector and stores th
     int mostfrq;
     vector<int> freq;
     vector<int> scr;
-    vector<int> modes;
     for (int i=0; i<scores.size(); i++)
     {
         //cout<< scores[i]
@@ -143,46 +169,49 @@ int calcMode(vector<int> scores,vector<int> mod)//reads the vector and stores th
             //freq.push_back(occurs);// not included because the vector was making a new element when I just wanted to increment
         }//this if statement counts the frequency.
     }// this for loop adds the unique elements into a vector and counts and adds the unique element's frequency into a frequency vector
-    for (int i=0; i<freq.size()-1; i++)
+
+    for (int i=0; i<freq.size()-1; i++)//comparing with next element, so the last element is compared -1 than the size
     {
         if (freq[i]>freq[i+1])
         {
             mostfrq= freq[i];
-            if (mostfrq>mode)
-            {
-                mode=mostfrq;
-            }
-            //cout<<"hi "<<mostfrq<<endl;
+
         }
-        if (freq[i]==mode)
+    }
+    //cout<<"hi this is most frequent"<<mostfrq<<endl;
+    for (int i=0; i<freq.size(); i++)
+    {
+        if (freq[i]==mostfrq)
         {
-            mode= scr[i];
-            modes.push_back(mode);
+            mod.push_back(scr[i]);
         }
-        for (int val:modes)
-        {
-            cout << val << " ";
-        }
-        cout<< endl;
     }//find the highest frequency and use the index to correspond to the scores vector and save the modes into a modes vector.
+//cout << "these are the modes: ";
+    /*for (int val:modes)
+    {
 
+        cout<< val<<" ";
+    }
+    cout<< endl;
 
-    /*this displays the unique score and frequency vectors and the most frequent #
-
-        for (int i=0; i<scr.size(); i++)
+    //this displays the unique score and frequency vectors and the most frequent #
+      for (int i=0; i<scr.size(); i++)
         {
             cout<< "scr: ";
-            cout << scr[i] << " "<< endl;
+            cout << scr[i] << " ";//<< endl;
             cout << "freq: "<< freq[i] << " "<<endl;
-            cout<< "most frequent: "<<mostfrq<<endl;
+           // cout<< "most frequent: "<<mostfrq<<endl;
         }*/
 
-}
 
+}
+/**=============================================================
+Prints the sorted vector, average, median and the mode vector.
+ ==============================================================*/
 void print(vector<int> testScores, int avg, int med, vector<int> mod)
 {
     // print the sorted vector, average, median, and mode
-    cout<< "These are the scores"<<endl;
+    cout<< "These are the sorted scores: "<<endl;
     for (int val:testScores)
     {
         cout << val << " ";
@@ -190,7 +219,7 @@ void print(vector<int> testScores, int avg, int med, vector<int> mod)
     cout<< endl<<"--------------------------------------"<<endl;
     cout<< "The average of the scores is:"<<endl<<avg<<endl;
     cout<< "The median of the scores is:"<<endl<<med<<endl;
-    cout<< "The mode(s) of the scores is:"<<endl;
+    cout<< "The mode(s) of the scores is/are:"<<endl;
     for (int val:mod)
     {
         cout << val << " ";
@@ -198,5 +227,77 @@ void print(vector<int> testScores, int avg, int med, vector<int> mod)
     cout<< endl;
 
 }
+/***********************************************************
+ ver 2.5 Output:
+____________________________________________________________
+
+ Please input file name:
+lab1.txt
+These are the sorted scores:
+61 61 66 68 71 72 73 73 74 74 77 79 80 80 85 87 87 87 87 88 89 90 91 92 92 92 92 97 99 100
+--------------------------------------
+The average of the scores is:
+82
+The median of the scores is:
+87
+The mode(s) of the scores is:
+87 92
+Press any key to input another file or # to exit.
+#
+Thank you for using this program.
+
+Process returned 0 (0x0)   execution time : 9.992 s
+Press any key to continue.
+=============================================================
+
+ver 2.5 output if a user input is not found/ incorrect:
+_____________________________________________________________
+
+Please input file name:
+lab
+File failed to open
+Error getting test scores
+Press any key to input another file or # to exit.
+l
+Please input file name:
+lab1.txt
+These are the sorted scores:
+61 61 66 68 71 72 73 73 74 74 77 79 80 80 85 87 87 87 87 88 89 90 91 92 92 92 92 97 99 100
+--------------------------------------
+The average of the scores is:
+82
+The median of the scores is:
+87
+The mode(s) of the scores is/are:
+87 92
+Press any key to input another file or # to exit.
+
+=============================================================
+
+ver 2.0 output:
+______________________________________________________________
+
+Please input file name:
+lab1.txt
+These are the sorted scores:
+61 61 66 68 71 72 73 73 74 74 77 79 80 80 85 87 87 87 87 88 89 90 91 92 92 92 92 97 99 100
+--------------------------------------
+The average of the scores is:
+82
+The median of the scores is:
+87
+The mode(s) of the scores is:
+87 92
+
+Process returned 0 (0x0)   execution time : 4.218 s
+Press any key to continue.
+____________________________________________________________
+
+If I could/were to keep working on this program, I would implement a
+way to create the most square-shaped cout of the vector by
+creating a nested for loop to make rows and columns.
+
+ **********************************************************/
+
 
 
