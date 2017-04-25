@@ -19,7 +19,7 @@ int getScores(vector<int>&testScores);//reference b/c the vector is being initia
 int sortScores(vector<int>&testScores);//reference b/c the sorted vector needs to return to main
 int calcAverage(vector<int>testScores, int);
 int calcMedian(vector<int>testScores,int);
-int calcMode(vector<int>testScores,vector<int> mod);
+int calcMode(vector<int>testScores,vector<int> &mod);
 void print(vector<int>testScores, int avg, int med, vector<int> mod);
 
 int main()
@@ -51,9 +51,9 @@ int getScores(vector <int> &testScores )
 {
     ifstream finput;
     int score;
-    string input="lab1.txt";//use this until test the cin
-    //cout << "Please input file name:" << endl;
-    //cin>>input;
+    string input;//="lab1.txt";//use this until test the cin
+    cout << "Please input file name:" << endl;
+    cin>>input;
     finput.open(input.c_str());//open file, ifstream reads as char*, so I needed to use .c_str
     if (finput.fail())
     {
@@ -79,14 +79,14 @@ int getScores(vector <int> &testScores )
 int sortScores(vector<int>&testScores)//sorts the vector
 {
     sort (testScores.begin(), testScores.end());
-    cout<< "This is the sorted vector:"<<endl;
+    /* cout<< "This is the sorted vector:"<<endl;
     for (int val:testScores)
-        // {
-        //for (int r=0; r <5&&testScores.size; r++ )
-    {
-        cout << val << " ";
-    }
-    cout<< endl;
+         // {
+         //for (int r=0; r <5&&testScores.size; r++ )
+     {
+         cout << val << " ";
+     }
+     cout<< endl;*/
     //}
 }
 int calcAverage(vector <int>scores, int avg)// sums the elements in the vector then divides it by the amount of elements
@@ -116,7 +116,7 @@ int calcMedian(vector<int>testScores, int med)// uses the amount of elements and
 
 }
 
-int calcMode(vector<int> scores,vector<int> mod)//reads the vector and stores the most occurring element
+int calcMode(vector<int> scores,vector<int> &mod)//reads the vector and stores the most occurring element
 //count and compare
 {
     int occurs=1;
@@ -124,7 +124,6 @@ int calcMode(vector<int> scores,vector<int> mod)//reads the vector and stores th
     int mostfrq;
     vector<int> freq;
     vector<int> scr;
-    vector<int> modes;
     for (int i=0; i<scores.size(); i++)
     {
         //cout<< scores[i]
@@ -143,46 +142,47 @@ int calcMode(vector<int> scores,vector<int> mod)//reads the vector and stores th
             //freq.push_back(occurs);// not included because the vector was making a new element when I just wanted to increment
         }//this if statement counts the frequency.
     }// this for loop adds the unique elements into a vector and counts and adds the unique element's frequency into a frequency vector
+
     for (int i=0; i<freq.size()-1; i++)
     {
         if (freq[i]>freq[i+1])
         {
             mostfrq= freq[i];
-            if (mostfrq>mode)
-            {
-                mode=mostfrq;
-            }
-            //cout<<"hi "<<mostfrq<<endl;
+
         }
-        if (freq[i]==mode)
+    }
+    //cout<<"hi this is most frequent"<<mostfrq<<endl;
+    for (int i=0; i<freq.size(); i++)
+    {
+        if (freq[i]==mostfrq)
         {
-            mode= scr[i];
-            modes.push_back(mode);
+            mod.push_back(scr[i]);
         }
-        for (int val:modes)
-        {
-            cout << val << " ";
-        }
-        cout<< endl;
     }//find the highest frequency and use the index to correspond to the scores vector and save the modes into a modes vector.
+//cout << "these are the modes: ";
+    /*for (int val:modes)
+    {
 
+        cout<< val<<" ";
+    }
+    cout<< endl;
 
-    /*this displays the unique score and frequency vectors and the most frequent #
-
-        for (int i=0; i<scr.size(); i++)
+    //this displays the unique score and frequency vectors and the most frequent #
+      for (int i=0; i<scr.size(); i++)
         {
             cout<< "scr: ";
-            cout << scr[i] << " "<< endl;
+            cout << scr[i] << " ";//<< endl;
             cout << "freq: "<< freq[i] << " "<<endl;
-            cout<< "most frequent: "<<mostfrq<<endl;
+           // cout<< "most frequent: "<<mostfrq<<endl;
         }*/
+
 
 }
 
 void print(vector<int> testScores, int avg, int med, vector<int> mod)
 {
     // print the sorted vector, average, median, and mode
-    cout<< "These are the scores"<<endl;
+    cout<< "These are the sorted scores: "<<endl;
     for (int val:testScores)
     {
         cout << val << " ";
